@@ -25,8 +25,8 @@
 
     <div class="container">
         <div class="row">
-            <div class="col"></div>
-            <div class="col-8 table-responsive table-shadow">
+            
+            <div class="col table-responsive table-shadow">
                 <table class="table">
                     <thead class="text-center">
                         <tr>
@@ -36,7 +36,7 @@
                     <tbody id="tbody_root">
                         <tr>
                             <td>
-                                <div class="alert alert-info" role="alert">
+                                <div class="alert alert-info col-12" role="alert">
                                     <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg> <span id="current_date" style="font-weight: bold;"></span>
                                 </div>
                             </td>
@@ -45,7 +45,7 @@
                 </table>
 
             </div>
-            <div class="col"></div>
+            
         </div>
     </div>
 
@@ -65,17 +65,22 @@
 
         var count_pipeline = Object.keys(dict_pipeline_name).length
         
+        
         var i;
         for (i = 0; i < count_pipeline; i++) {
             
             var table_row = document.createElement("tr");
             var table_column = document.createElement("td");
             table_column.className="col"
-            table_column.style="display:flex; flex-direction: row; justify-content: center; align-items: center;"
-            
-            
+            if (window.matchMedia('screen and (min-width: 600px)').matches) {
+                    table_column.style="display:flex; flex-direction: row; justify-content: center; align-items: center;";
+            }
+            else {
+                    table_column.style="display:flex; flex-direction: column; justify-content: center; align-items: inherit;";
+            }
             table_body.appendChild(table_row);
             table_row.appendChild(table_column);
+            
 
             // criação do card bootstrap com a descrição e horário do pipeline
             var div_card = document.createElement("div");
@@ -87,72 +92,100 @@
             div_card.appendChild(div_card_child)
             div_card.id = "div_card" + i
             table_column.appendChild(div_card);
+            
 
             // criação do botão bootstrap OK
-            var btn_success = document.createElement("input");
-            btn_success.type = "button";
-            btn_success.name = "success" + i;
-            btn_success.value="OK";
-            btn_success.className="btn btn-success margin-btn";
-            btn_success.id = "success" + i
-            btn_success.addEventListener("click", success.bind(this, div_card.id), false);
-            table_column.appendChild(btn_success);
+            var group_button = document.createElement("div");
+            group_button.className="btn-group margin-btn";
+            group_button.role = "group";
+            group_button.ariaLabel="Basic outlined example";
+            group_button.name = "group_button" + i;
+            group_button.id = "group_button" + i
+            table_column.appendChild(group_button);
 
             // criação do botão bootstrap NOK
-            var btn_error = document.createElement("input");
-            btn_error.type = "button";
-            btn_error.name = "error" + i;
-            btn_error.value="NOK";
-            btn_error.className="btn btn-danger margin-btn";
-            btn_error.id = "error" + i
-            btn_error.addEventListener("click", error.bind(this, div_card.id), false);
-            table_column.appendChild(btn_error);
+            var btn_ok = document.createElement("button");
+            btn_ok.type = "button";
+            btn_ok.className="btn btn-outline-success";
+            btn_ok.innerHTML="OK";
+            btn_ok.name = "btn_ok" + i;
+            btn_ok.id = "btn_ok" + i;
+            btn_ok.addEventListener("click", success.bind(this, div_card.id), false);
+            group_button.appendChild(btn_ok);
+
+            // criação do botão bootstrap NOK
+            var btn_nok = document.createElement("button");
+            btn_nok.type = "button";
+            btn_nok.className="btn btn-outline-danger";
+            btn_nok.innerHTML="NOK";
+            btn_nok.name = "btn_nok" + i;
+            btn_nok.id = "btn_nok" + i;
+            btn_nok.addEventListener("click", error.bind(this, div_card.id), false);
+            group_button.appendChild(btn_nok);
 
             // criação do botão bootstrap In Progress
-            var btn_in_progress = document.createElement("input");
+            var btn_in_progress = document.createElement("button");
             btn_in_progress.type = "button";
-            btn_in_progress.name = "in_progress" + i;
-            btn_in_progress.value="In Progress";
-            btn_in_progress.className="btn btn-primary margin-btn";
-            btn_in_progress.id = "in_progress" + i
+            btn_in_progress.className="btn btn-outline-primary";
+            btn_in_progress.innerHTML="In Progress";
+            btn_in_progress.name = "btn_in_progress" + i;
+            btn_in_progress.id = "btn_in_progress" + i;
             btn_in_progress.addEventListener("click", in_progress.bind(this, div_card.id), false);
-            table_column.appendChild(btn_in_progress);
+            group_button.appendChild(btn_in_progress);
 
             // criação do botão bootstrap Clear
-            var btn_clear = document.createElement("input");
+            var btn_clear = document.createElement("button");
             btn_clear.type = "button";
-            btn_clear.name = "clear" + i;
-            btn_clear.value="Clear";
-            btn_clear.className="btn btn-secondary margin-btn";
-            btn_clear.id = "clear" + i
+            btn_clear.className="btn btn-outline-secondary";
+            btn_clear.innerHTML="Clear";
+            btn_clear.name = "btn_clear" + i;
+            btn_clear.id = "btn_clear" + i;
             btn_clear.addEventListener("click", clear.bind(this, div_card.id), false);
-            table_column.appendChild(btn_clear);
+            group_button.appendChild(btn_clear);
+
 
 
             function success(param) {
                 document.getElementById(param).style.backgroundColor = "#198754";
                 document.getElementById(param).style.color = "white";
-                document.getElementById(param).style.transition = "background-color 250ms linear"
+                document.getElementById(param).style.transition = "background-color 250ms linear";
+                
             }
 
             function error(param) {
                 document.getElementById(param).style.backgroundColor = "#dc3545";
                 document.getElementById(param).style.color = "white";
-                document.getElementById(param).style.transition = "background-color 250ms linear"
+                document.getElementById(param).style.transition = "background-color 250ms linear";
             }
 
             function in_progress(param) {
                 document.getElementById(param).style.backgroundColor = "#0d6efd";
                 document.getElementById(param).style.color = "white";
-                document.getElementById(param).style.transition = "background-color 250ms linear"
+                document.getElementById(param).style.transition = "background-color 250ms linear";
             }
 
             function clear(param) {
                 document.getElementById(param).style.backgroundColor = "#ffffff";
                 document.getElementById(param).style.color = "black";
-                document.getElementById(param).style.transition = "background-color 250ms linear"
+                document.getElementById(param).style.transition = "background-color 250ms linear";
             }
         }
+
+        window.onresize = function() {
+            if (window.matchMedia('screen and (min-width: 600px)').matches) {
+                for (item of document.querySelectorAll("td").values()){
+                    item.style="display:flex; flex-direction: row; justify-content: center; align-items: center;";
+                }
+            }
+            else {
+                for (item of document.querySelectorAll("td").values()){
+                    item.style="display:flex; flex-direction: column; justify-content: center; align-items: inherit;";
+                }
+            }
+        };
+        
+
+        
     </script>
 </body>
 </html>
