@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <style>
+        .margin-btn{
+            margin-left: 5px;
+        }
+        .table-shadow{
+            margin-top: 15px;
+            box-shadow: 2px 5px 4px #5e5e5e;
+        }
+    </style>
+</head>
+<body>
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+        </symbol>
+    </svg>
+
+    <div class="container">
+        <div class="row">
+            <div class="col"></div>
+            <div class="col-8 table-responsive table-shadow">
+                <table class="table">
+                    <thead class="text-center">
+                        <tr>
+                            <th scope="col" colspan="2">Monitoramento de Pipelines</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody_root">
+                        <tr>
+                            <td>
+                                <div class="alert alert-info" role="alert">
+                                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg> <span id="current_date" style="font-weight: bold;"></span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="col"></div>
+        </div>
+    </div>
+
+   <script>
+        var date = new Date().toLocaleDateString("pt-BR");
+        var current_date_var = document.getElementById("current_date")
+        current_date_var.innerHTML = "Data de hoje: " + date
+
+        var table_body  = document.getElementById("tbody_root");
+        
+        // PREENCHER CONFORME NECESSÁRIO
+        var dict_pipeline_name = {
+            "0": {"name":"08:00 - teste 1"},
+            "1": {"name":"09:00 - teste 2"},
+            "2": {"name":"09:20 - teste 3"}
+        }
+
+        var count_pipeline = Object.keys(dict_pipeline_name).length
+        
+        var i;
+        for (i = 0; i < count_pipeline; i++) {
+            
+            var table_row = document.createElement("tr");
+            var table_column = document.createElement("td");
+            table_column.className="col"
+            table_column.style="display:flex; flex-direction: row; justify-content: center; align-items: center;"
+            
+            
+            table_body.appendChild(table_row);
+            table_row.appendChild(table_column);
+
+            // criação do card bootstrap com a descrição e horário do pipeline
+            var div_card = document.createElement("div");
+            var div_card_child = document.createElement("div")
+            div_card_child.className="card-body";
+            div_card_child.style="padding: 6px 12px;"
+            div_card_child.textContent=dict_pipeline_name[i]["name"]
+            div_card.className="card col"
+            div_card.appendChild(div_card_child)
+            div_card.id = "div_card" + i
+            table_column.appendChild(div_card);
+
+            // criação do botão bootstrap OK
+            var btn_success = document.createElement("input");
+            btn_success.type = "button";
+            btn_success.name = "success" + i;
+            btn_success.value="OK";
+            btn_success.className="btn btn-success margin-btn";
+            btn_success.id = "success" + i
+            btn_success.addEventListener("click", success.bind(this, div_card.id), false);
+            table_column.appendChild(btn_success);
+
+            // criação do botão bootstrap NOK
+            var btn_error = document.createElement("input");
+            btn_error.type = "button";
+            btn_error.name = "error" + i;
+            btn_error.value="NOK";
+            btn_error.className="btn btn-danger margin-btn";
+            btn_error.id = "error" + i
+            btn_error.addEventListener("click", error.bind(this, div_card.id), false);
+            table_column.appendChild(btn_error);
+
+            // criação do botão bootstrap In Progress
+            var btn_in_progress = document.createElement("input");
+            btn_in_progress.type = "button";
+            btn_in_progress.name = "in_progress" + i;
+            btn_in_progress.value="In Progress";
+            btn_in_progress.className="btn btn-primary margin-btn";
+            btn_in_progress.id = "in_progress" + i
+            btn_in_progress.addEventListener("click", in_progress.bind(this, div_card.id), false);
+            table_column.appendChild(btn_in_progress);
+
+            // criação do botão bootstrap Clear
+            var btn_clear = document.createElement("input");
+            btn_clear.type = "button";
+            btn_clear.name = "clear" + i;
+            btn_clear.value="Clear";
+            btn_clear.className="btn btn-secondary margin-btn";
+            btn_clear.id = "clear" + i
+            btn_clear.addEventListener("click", clear.bind(this, div_card.id), false);
+            table_column.appendChild(btn_clear);
+
+
+            function success(param) {
+                document.getElementById(param).style.backgroundColor = "#198754";
+                document.getElementById(param).style.color = "white";
+                document.getElementById(param).style.transition = "background-color 250ms linear"
+            }
+
+            function error(param) {
+                document.getElementById(param).style.backgroundColor = "#dc3545";
+                document.getElementById(param).style.color = "white";
+                document.getElementById(param).style.transition = "background-color 250ms linear"
+            }
+
+            function in_progress(param) {
+                document.getElementById(param).style.backgroundColor = "#0d6efd";
+                document.getElementById(param).style.color = "white";
+                document.getElementById(param).style.transition = "background-color 250ms linear"
+            }
+
+            function clear(param) {
+                document.getElementById(param).style.backgroundColor = "#ffffff";
+                document.getElementById(param).style.color = "black";
+                document.getElementById(param).style.transition = "background-color 250ms linear"
+            }
+        }
+    </script>
+</body>
+</html>
