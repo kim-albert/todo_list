@@ -57,29 +57,38 @@
         var table_body  = document.getElementById("tbody_root");
         
         // PREENCHER CONFORME NECESSÁRIO
-        var dict_pipeline_name = {
-            "0": {"name":"08:00 - teste 0"},
-            "1": {"name":"09:00 - teste 1"},
-            "2": {"name":"09:20 - teste 2"},
-            "3": {"name":"09:20 - teste 3"},
-            "4": {"name":"09:20 - teste 4"},
-            "5": {"name":"09:20 - teste 5"},
-            "6": {"name":"09:20 - teste 6"},
-            "7": {"name":"09:20 - teste 7"},
-            "8": {"name":"09:20 - teste 8"},
-            "9": {"name":"09:20 - teste 9"},
-            "10": {"name":"09:20 - teste 10"},
-            "11": {"name":"09:20 - teste 11"},
-            "12": {"name":"09:20 - teste 12"},
-            "13": {"name":"09:20 - teste 13"},
-            "14": {"name":"09:20 - teste 14"},
-            "15": {"name":"09:20 - teste 15"},
-            "16": {"name":"09:20 - teste 16"},
-            "17": {"name":"12:20 - teste 17"}
+        var list_pipeline_name = [
+            {"name":"08:00 - teste 0"},
+            {"name":"09:00 - teste 1"},
+            {"name":"09:20 - teste 2"},
+            {"name":"09:20 - teste 3"},
+            {"name":"09:20 - teste 4"},
+            {"name":"09:20 - teste 5"},
+            {"name":"11:20 - new append, index 6"},
+            {"name":"09:20 - teste 6"},
+            {"name":"09:20 - teste 7"},
+            {"name":"09:20 - teste 8"},
+            {"name":"09:20 - teste 9"},
+            {"name":"09:20 - teste 10"},
+            {"name":"09:20 - teste 11"},
+            {"name":"09:20 - teste 12"},
+            {"name":"09:20 - teste 13"},
+            {"name":"09:20 - teste 14"},
+            {"name":"09:20 - teste 15"},
+            {"name":"09:20 - teste 16"},
+            {"name":"12:20 - teste 17"}
+        ]
+
+
+        // criando um index dinâmico de acordo com a ordem da lista
+        var dict_pipeline_name = {}
+        for (const [index, element] of Object.entries(list_pipeline_name)) {
+            console.log(index, element)
+            dict_pipeline_name[index] = element
         }
+        
 
         var count_pipeline = Object.keys(dict_pipeline_name).length
-        
         
         var i;
         for (i = 0; i < count_pipeline; i++) {
